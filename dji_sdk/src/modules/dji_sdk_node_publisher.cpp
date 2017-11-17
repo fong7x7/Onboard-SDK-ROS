@@ -370,13 +370,11 @@ DJISDKNode::publish50HzData(Vehicle* vehicle, RecvContainer recvFrame,
   p->displaymode_publisher.publish(status_dm);
 
   /**
-    * NOTE: When using SBUS remote controllers, the rc.mode
+    * TODO: When using SBUS remote controllers, the rc.mode
     *       does not properly reflect the rc's input.
-    *       Therefore the rc command uses broadcast info
-    *       instead (for now).
     */
-//  Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
-//    vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
+  Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
+    vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
 
   /********* RC Map (A3) *********
   *
@@ -397,38 +395,19 @@ DJISDKNode::publish50HzData(Vehicle* vehicle, RecvContainer recvFrame,
 
   *****************************/
 
-//  sensor_msgs::Joy rc_joy;
-//  rc_joy.header.stamp    = msg_time;
-//  rc_joy.header.frame_id = "rc";
+  sensor_msgs::Joy rc_joy;
+  rc_joy.header.stamp    = msg_time;
+  rc_joy.header.frame_id = "rc";
 
-//  rc_joy.axes.reserve(6);
+  rc_joy.axes.reserve(6);
 
-//  rc_joy.axes.push_back(static_cast<float>(rc.roll     / 10000.0));
-//  rc_joy.axes.push_back(static_cast<float>(rc.pitch    / 10000.0));
-//  rc_joy.axes.push_back(static_cast<float>(rc.yaw      / 10000.0));
-//  rc_joy.axes.push_back(static_cast<float>(rc.throttle / 10000.0));
-//  rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
-//  rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
-//  p->rc_publisher.publish(rc_joy);
-  short int data_enable_flag = vehicle->broadcast->getPassFlag();
-
-  if (data_enable_flag & DataBroadcast::DATA_ENABLE_FLAG::A3_HAS_RC)
-  {
-    sensor_msgs::Joy rc_joy;
-    rc_joy.header.stamp    = msg_time;
-    rc_joy.header.frame_id = "rc";
-
-    rc_joy.axes.reserve(6);
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().roll     / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().pitch    / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().yaw      / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().throttle / 10000.0));
-
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().mode));
-    rc_joy.axes.push_back(static_cast<float>(vehicle->broadcast->getRC().gear));
-    p->rc_publisher.publish(rc_joy);
-  }
-
+  rc_joy.axes.push_back(static_cast<float>(rc.roll     / 10000.0));
+  rc_joy.axes.push_back(static_cast<float>(rc.pitch    / 10000.0));
+  rc_joy.axes.push_back(static_cast<float>(rc.yaw      / 10000.0));
+  rc_joy.axes.push_back(static_cast<float>(rc.throttle / 10000.0));
+  rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
+  rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
+  p->rc_publisher.publish(rc_joy);
 }
 
 void
