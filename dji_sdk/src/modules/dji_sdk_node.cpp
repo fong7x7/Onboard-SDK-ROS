@@ -37,25 +37,10 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
 
   // @todo need some error handling for init functions
   //! @note parsing launch file to get environment parameters
-
-//  bool initSuccess = false;
-//  while (ros::ok()) {
-//    initSuccess = initVehicle(nh_private);
-//    if (initSuccess) {
-//      ROS_INFO("Vehicle initialization succeeded");
-//      break;
-//    }
-//    ROS_ERROR("Vehicle initialization failed");
-//    ROS_INFO("retrying...");
-//    ros::Duration(1).sleep();
-//  }
-//
-//  if (initSuccess)
-
-
   if (!initVehicle(nh_private))
   {
     ROS_ERROR("Vehicle initialization failed");
+    ROS_WARN("node will now exit, please configure roslaunch file to respawn node");
     throw 1;
   }
 
