@@ -163,9 +163,9 @@ DJISDKNode::dataBroadcastCallback()
   if ( flag_has_battery )
   {
     sensor_msgs::BatteryState msg_battery_state;
-    msg_battery_state.capacity = NAN;
-    msg_battery_state.voltage  = NAN;
-    msg_battery_state.current  = NAN;
+    msg_battery_state.capacity = vehicle->broadcast->getBatteryInfo().capacity;
+    msg_battery_state.voltage  = vehicle->broadcast->getBatteryInfo().voltage;
+    msg_battery_state.current  = vehicle->broadcast->getBatteryInfo().current;
     msg_battery_state.percentage = vehicle->broadcast->getBatteryInfo().percentage;
     msg_battery_state.charge   = NAN;
     msg_battery_state.design_capacity = NAN;
